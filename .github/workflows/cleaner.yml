@@ -1,27 +1,27 @@
-name: dill cleaner
+name: dila cleaner
 
 # 1. شوكت يشتغل السيرفر؟
 on:
   push:
     paths:
-      - 'raw_img/**' # يشتغل تلقائياً فقط وفوراً عندما يدحش زيزو (أو البوت) صورة جديدة داخل هذا المجلد
+      - 'raw_img/**' # يشتغل تلقائياً فوراً عندما ترفع صورة جديدة داخل هذا المجلد
 
 jobs:
   clean-manga:
-    runs-on: ubuntu-latest # فتح سيرفر أوبونتو مجاني بأحدث نسخة
+    runs-on: ubuntu-latest # فتح سيرفر أوبونتو مجاني
 
     steps:
     # الخطوة أ: سحب ملفات المستودع للسيرفر
     - name: Checkout Repository Code
       uses: actions/checkout@v4
 
-    # الخطوة ب: إعداد بيئة بايثون 3.10
+    # 🛠️ الخطوة ب: إعداد بيئة بايثون (تم تصحيح الأكشين هنا ✅)
     - name: Set up Python
-      uses: actions/python-version@v5
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    # 🔥 الخطوة ج: تفعيل كاش مكتبات بايثون (PIP Cache)
+    # الخطوة ج: تفعيل كاش مكتبات بايثون (PIP Cache)
     - name: Cache Pip Packages
       uses: actions/cache@v4
       with:
@@ -30,10 +30,33 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    # 🔥 الخطوة د: تفعيل كاش موديلات الذكاء الاصطناعي (EasyOCR Models)
-    # هذي تمنع السيرفر من تحميل موديل القراءة (150 ميجا) بكل مرة
+    # الخطوة د: تفعيل كاش موديلات الذكاء الاصطناعي (EasyOCR Models)
     - name: Cache EasyOCR Models
       uses: actions/cache@v4
+      with:
+        path: ~/.EasyOCR
+        key: ${{ runner.os }}-easyocr-models
+        restore-keys: |
+          ${{ runner.os }}-easyocr-models-
+
+    # الخطوة هـ: تثبيت المكتبات
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # الخطوة و: تشغيل محرك التبييض
+    - name: Run Cleaner Engine
+      run: python cleaner.py
+
+    # الخطوة ز: حفظ التغييرات ودفع الصور المبيضة
+    - name: Commit and Push Cleaned Images
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Zizo-Auto-Cleaner"
+        git add clean_img/*
+        git diff-index --quiet HEAD || git commit -m "🧼 تم تبييض الفصل بنجاح ساحق!"
+        git push
       with:
         path: ~/.EasyOCR
         key: ${{ runner.os }}-easyocr-models
