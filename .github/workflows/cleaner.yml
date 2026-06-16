@@ -1,4 +1,4 @@
-name: Manga Auto Cleaner Engine
+name: Manga Auto Cleaner Engine with MangaScourX
 
 on:
   push:
@@ -17,15 +17,19 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
+        cache: 'pip' # تفعيل الكاش لتسريع تحميل الموديلات بـ EasyOCR
 
-    - name: Install Dependencies
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git
+
+    - name: Install Core Library Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install opencv-python-headless easyocr numpy fal-client
+        pip install -r requirements.txt
 
-    - name: Run Cleaner Engine
-      env:
-        FAL_KEY: ${{ secrets.FAL_KEY }} # 🔥 هنا مررنا السلاح السري للسيرفر بأمان
+    - name: Run MangaScourX Cleaner Engine
       run: python cleaner.py
 
     - name: Commit and Push Cleaned Images
@@ -33,7 +37,8 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "Zizo-Auto-Cleaner"
         git add clean_img/*
-        git diff-index --quiet HEAD || git commit -m "🧼 تم التبييض التوليدي الذكي بنجاح ساحق!"
+        git diff-index --quiet HEAD || git commit -m "🧼 تم التبييض والتنظيف الاحترافي بواسطة وحش MangaScourX محلياً!"
+        git push origin main
         git push origin main --force
         git push origin main --force
 
