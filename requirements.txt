@@ -2,4 +2,5 @@ opencv-python-headless
 easyocr
 numpy
 scipy
-fal-client
+numba
+git+https://github.com/zxiu86/MangaScourX.git
