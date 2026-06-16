@@ -5,6 +5,8 @@ import easyocr
 import numpy as np
 
 # 🔥 استدعاء الوحش المحلي مالتنا MangaScourX
+# الاستدعاء الأضمن والأقوى الذي يتخطى تضارب الأسماء بالحروف الكبيرة والصغيرة
+import MangaScourX
 from MangaScourX.inpainting.patchmatch.engine import PatchMatchInpainter
 
 print("⏳ جاري تشغيل عيون الـ OCR الذكية...")
