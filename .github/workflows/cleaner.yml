@@ -31,9 +31,9 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "Zizo-Auto-Cleaner"
         git add clean_img/*
-        # إذا ماكو شي جديد يوقف السيرفر بدون خطأ
+        # إذا ماكو شي جديد يوقف السيرفر بدون كراش
         git diff-index --quiet HEAD || git commit -m "🧼 تم تبييض الفصل بنجاح ساحق!"
-        # 🛠️ التصليح السحري هنا: يسحب التحديثات ويرتب الملفات قبل الدفع لضمان عدم الرفض
-        git pull --rebase origin main
-        git push origin main
+        # 🛠️ الضربة القاضية: الدفع بالقوة وعبر الـ Token الافتراضي للسيرفر
+        git push origin main --force
+
 
