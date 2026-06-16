@@ -2,3 +2,4 @@ opencv-python-headless
 easyocr
 numpy
 scipy
+fal-client
