@@ -5,7 +5,7 @@ import easyocr
 import numpy as np
 
 # 🔥 استدعاء الوحش المحلي مالتنا MangaScourX
-from mangascour.inpainting.patchmatch.engine import PatchMatchInpainter
+from MangaScourX.inpainting.patchmatch.engine import PatchMatchInpainter
 
 print("⏳ جاري تشغيل عيون الـ OCR الذكية...")
 reader = easyocr.Reader(['en'])
