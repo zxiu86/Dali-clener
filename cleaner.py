@@ -4,7 +4,8 @@ import cv2
 import easyocr
 import numpy as np
 
-# 🔥 الاستدعاء العالمي النظيف والمباشر للأبد!
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from MangaScourX import PatchMatchInpainter
 
 print("⏳ جاري تشغيل عيون الـ OCR الذكية...")
