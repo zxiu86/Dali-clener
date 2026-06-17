@@ -4,13 +4,7 @@ import cv2
 import easyocr
 import sys
 import numpy as np
-
-# الاستدعاء الرسمي الصحيح حسب بنية الحزمة المكتوبة بملفات المبرمج
-from MangaScourX.pipelines.manga_clean import MangaCleanPipeline
-
-# إذا جنت تريد تستخدم بس محرك الـ PatchMatchInpainter اللي بملف الـ inpainting:
-# from MangaScourX.inpainting.patchmatch.engine import PatchMatchInpainter
-
+import MangaScourX as msx
 
 print("⏳ جاري تشغيل عيون الـ OCR الذكية...")
 reader = easyocr.Reader(['en'])
