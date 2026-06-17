@@ -2,45 +2,43 @@ name: Manga Auto Cleaner Engine with MangaScourX
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master]
   pull_request:
-    branches:
-      - main
-      - master
+    branches: [main, master]
 
 jobs:
   clean-manga:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository Code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.10'
         cache: 'pip'
 
-    - name: Install System Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y git
-
-    - name: Install Core Library Dependencies
+    - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run MangaScourX Cleaner Engine
+    - name: Verify MangaScourX
+      run: |
+        python -c "
+        import MangaScourX
+        print('✅ MangaScourX', MangaScourX.__version__)
+        from MangaScourX import MangaCleanPipeline
+        print('✅ MangaCleanPipeline جاهز')
+        "
+
+    - name: Run Cleaner
       run: python cleaner.py
 
-    - name: Commit and Push Cleaned Images
+    - name: Commit Cleaned Images
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "Zizo-Auto-Cleaner"
-        git add clean_img/*
-        git diff-index --quiet HEAD || git commit -m "🧼 تم التبييض والتنظيف الاحترافي بواسطة وحش MangaScourX الرسمي!"
-        git push origin main || echo "No changes to push or branch protected."
+        git add clean_img/
+        git diff-index --quiet HEAD || git commit -m "🧼 تبييض وتنظيف تلقائي بواسطة MangaScourX"
+        git push origin main || echo "No changes"
