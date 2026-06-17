@@ -4,4 +4,4 @@ numba>=0.53.0
 scipy>=1.7.0
 torch>=1.9.0
 torchvision>=0.10.0
-MangaScourX>=1.0.1
+pip install mangascourx==1.0.3
