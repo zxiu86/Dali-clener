@@ -1,9 +1,15 @@
 name: Manga Auto Cleaner Engine with MangaScourX
 
+# التعديل: جعل الوورك فلو يشتغل عند أي تغيير يصير بكل الملفات والمجلدات
 on:
   push:
-    paths:
-      - 'raw_img/**'
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
 
 jobs:
   clean-manga:
@@ -29,6 +35,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # الخيار الثاني: سحب مستودع المبرمج وتغيير اسم المجلد ليتوافق مع استدعائك بـ cleaner.py
+    - name: Clone MangaScourX Repository Locally
+      run: |
+        git clone https://github.com/zxiu86/MangaScourX.git
+        mv MangaScourX MangaScourX_Repo
+        mv MangaScourX_Repo/mangascour ./MangaScourX
+
     - name: Run MangaScourX Cleaner Engine
       run: python cleaner.py
 
@@ -38,8 +51,4 @@ jobs:
         git config --local user.name "Zizo-Auto-Cleaner"
         git add clean_img/*
         git diff-index --quiet HEAD || git commit -m "🧼 تم التبييض والتنظيف الاحترافي بواسطة وحش MangaScourX محلياً!"
-        git push origin main
-        git push origin main --force
-        git push origin main --force
-
-
+        git push origin main || echo "No changes to push or branch protected."
