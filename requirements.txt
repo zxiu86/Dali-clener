@@ -3,3 +3,4 @@ easyocr
 numpy
 scipy
 numba
+git+https://github.com/zxiu86/MangaScourX.git
