@@ -5,9 +5,16 @@ import easyocr
 import sys
 import numpy as np
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# 1. نجيب المسار الكامل للمجلد اللي بيه ملف cleaner.py الحالي
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(current_dir)
 
+# 2. تكتيك الطوارئ: نطبع المجلدات الموجودة بالسيرفر حتى نكشف الغشاش وين ضام المجلد
+print("المجلدات الموجودة بصف ملف الـ cleaner هي:", os.listdir(current_dir))
+
+# 3. هسة نستدعي المكتبة، وإذا اكو غلط بالاسم راح يبين بالـ print فوك
 from MangaScourX import PatchMatchInpainter
+
 
 print("⏳ جاري تشغيل عيون الـ OCR الذكية...")
 reader = easyocr.Reader(['en'])
