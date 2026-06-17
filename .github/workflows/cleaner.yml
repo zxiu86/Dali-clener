@@ -1,39 +1,80 @@
-name: Manga Auto Cleaner Engine with MangaScourX
+name: Manga Auto Cleaner Engine with mangascourx
 
 on:
   push:
-    branches: [main, master]
+    branches:
+      - main
+      - master
   pull_request:
-    branches: [main, master]
+    branches:
+      - main
+      - master
+  workflow_dispatch:
 
 jobs:
   clean-manga:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    # ------------------------------------------------------------
+    # 1. Checkout Repository
+    # ------------------------------------------------------------
+    - name: Checkout Repository Code
+      uses: actions/checkout@v4
 
-    - uses: actions/setup-python@v5
+    # ------------------------------------------------------------
+    # 2. Setup Python
+    # ------------------------------------------------------------
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
         cache: 'pip'
 
-    - name: Install Dependencies
+    # ------------------------------------------------------------
+    # 3. Install System Dependencies
+    # ------------------------------------------------------------
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git libgl1-mesa-glx
+
+    # ------------------------------------------------------------
+    # 4. Install Python Dependencies
+    # ------------------------------------------------------------
+    - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # ------------------------------------------------------------
+    # 5. Verify mangascourx Installation
+    # ------------------------------------------------------------
     - name: Verify mangascourx
       run: |
         python -c "
         import mangascourx
-        print('✅ mangascourx', mangascourx.__version__)
+        print('✅ mangascourx version:', mangascourx.__version__)
         from mangascourx import MangaCleanPipeline
-        print('✅ MangaCleanPipeline جاهز')
+        print('✅ MangaCleanPipeline ready')
         "
 
-    - name: Run Cleaner
+    # ------------------------------------------------------------
+    # 6. Run Cleaner
+    # ------------------------------------------------------------
+    - name: Run Manga Cleaner Engine
       run: python cleaner.py
+
+    # ------------------------------------------------------------
+    # 7. Commit and Push Cleaned Images
+    # ------------------------------------------------------------
+    - name: Commit and Push Cleaned Images
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Zizo-Auto-Cleaner"
+        git add clean_img/
+        git diff-index --quiet HEAD || git commit -m "🧼 تم التبييض والتنظيف الاحترافي بواسطة وحش mangascourx الرسمي!"
+        git push origin main || echo "No changes to push or branch protected."
 
     - name: Commit Cleaned Images
       run: |
