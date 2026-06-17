@@ -2,6 +2,7 @@ import os
 import glob
 import cv2
 import easyocr
+import sys
 import numpy as np
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
