@@ -23,12 +23,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Verify MangaScourX
+    - name: Verify mangascourx
       run: |
         python -c "
-        import MangaScourX
-        print('✅ MangaScourX', MangaScourX.__version__)
-        from MangaScourX import MangaCleanPipeline
+        import mangascourx
+        print('✅ mangascourx', mangascourx.__version__)
+        from mangascourx import MangaCleanPipeline
         print('✅ MangaCleanPipeline جاهز')
         "
 
