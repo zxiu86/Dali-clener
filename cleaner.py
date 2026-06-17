@@ -4,7 +4,7 @@ import cv2
 import MangaScourX as msx
 
 def main():
-    # 1. تحديد مجلدات المدخلات والمخرجات حسب طلبك
+    # 1. تحديد مجلدات المدخلات والمخرجات
     input_dir = "raw_img"
     output_dir = "clean_img"
     
@@ -34,7 +34,7 @@ def main():
         
     print(f"📸 تم العثور على {len(files)} صورة، جاري الطحن والتنظيف بالـ 5D...")
 
-    # 4. الدوران على الصور ومعالجتها واحدة تلو الأخرى
+    # 4. الدوران على الصور ومعالجتها واحدة تلو الأخرى داخل دالة main
     for file_name in files:
         input_path = os.path.join(input_dir, file_name)
         output_path = os.path.join(output_dir, file_name)
@@ -65,19 +65,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-        # المحرك يتوقع ماسك True للـ خراب (النص) و False للـ سليم
-        known_mask = mask == 0
-        cleaned_img = inpainter.run(img, known_mask)
-        
-        # حفظ النتيجة النهائية الفخمة
-        output_path = os.path.join(CLEAN_DIR, img_name)
-        cv2.imwrite(output_path, cleaned_img)
-        print(f"✅ تم التطهير المحلي وحفظ: {img_name}")
-        
-    except Exception as e:
-        print(f"⚠️ خطأ غير متوقع أثناء المعالجة: {e}")
-        # نظام الطوارئ السريع والتقليدي إذا انضربت أي مصفوفة بالـ Memory
-        backup_fill = cv2.inpaint(img, mask, inpaintRadius=5, flags=cv2.INPAINT_NS)
-        cv2.imwrite(os.path.join(CLEAN_DIR, img_name), backup_fill)
-
-print("\n🎉 قفلنا السيرفر بالكامل! عوف غباء الـ API وروح شوف الإبداع المحلي الخارق!")
