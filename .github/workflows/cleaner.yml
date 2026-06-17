@@ -44,21 +44,3 @@ jobs:
         git add clean_img/*
         git diff-index --quiet HEAD || git commit -m "🧼 تم التبييض والتنظيف الاحترافي بواسطة وحش MangaScourX محلياً!"
         git push origin main || echo "No changes to push or branch protected."
-
-    # الخيار الثاني: سحب مستودع المبرمج وتغيير اسم المجلد ليتوافق مع استدعائك بـ cleaner.py
-    - name: Clone MangaScourX Repository Locally
-      run: |
-        git clone https://github.com/zxiu86/MangaScourX.git
-        mv MangaScourX MangaScourX_Repo
-        mv MangaScourX_Repo/mangascour ./MangaScourX
-
-    - name: Run MangaScourX Cleaner Engine
-      run: python cleaner.py
-
-    - name: Commit and Push Cleaned Images
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "Zizo-Auto-Cleaner"
-        git add clean_img/*
-        git diff-index --quiet HEAD || git commit -m "🧼 تم التبييض والتنظيف الاحترافي بواسطة وحش MangaScourX محلياً!"
-        git push origin main || echo "No changes to push or branch protected."
