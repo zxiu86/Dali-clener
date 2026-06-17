@@ -4,4 +4,4 @@ numba>=0.53.0
 scipy>=1.7.0
 torch>=1.9.0
 torchvision
-git+https://github.com/zxui86/MangaScourX.git
+git+https://github.com/zxiu86/MangaScourX.git
