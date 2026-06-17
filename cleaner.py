@@ -4,7 +4,7 @@ import cv2
 import easyocr
 import numpy as np
 
-# 🔥 هسة الاستدعاء صار رسمي ونظيف ومستحيل يمضرط السيرفر بعد!
+# 🔥 الاستدعاء العالمي النظيف والمباشر للأبد!
 from MangaScourX import PatchMatchInpainter
 
 print("⏳ جاري تشغيل عيون الـ OCR الذكية...")
