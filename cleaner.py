@@ -5,15 +5,11 @@ import easyocr
 import sys
 import numpy as np
 
-# 1. نجيب المسار الكامل للمجلد اللي بيه ملف cleaner.py الحالي
-current_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(current_dir)
+# الاستدعاء الرسمي الصحيح حسب بنية الحزمة المكتوبة بملفات المبرمج
+from MangaScourX.pipelines.manga_clean import MangaCleanPipeline
 
-# 2. تكتيك الطوارئ: نطبع المجلدات الموجودة بالسيرفر حتى نكشف الغشاش وين ضام المجلد
-print("المجلدات الموجودة بصف ملف الـ cleaner هي:", os.listdir(current_dir))
-
-# 3. هسة نستدعي المكتبة، وإذا اكو غلط بالاسم راح يبين بالـ print فوك
-from MangaScourX import PatchMatchInpainter
+# إذا جنت تريد تستخدم بس محرك الـ PatchMatchInpainter اللي بملف الـ inpainting:
+# from MangaScourX.inpainting.patchmatch.engine import PatchMatchInpainter
 
 
 print("⏳ جاري تشغيل عيون الـ OCR الذكية...")
