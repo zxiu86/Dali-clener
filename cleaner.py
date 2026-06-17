@@ -1,63 +1,70 @@
 import os
-import glob
 import cv2
-import easyocr
-import sys
-import numpy as np
+# استدعاء الحزمة الشاملة بكلمة واحدة عبر الاختصار السحري الملوكي
 import MangaScourX as msx
 
-print("⏳ جاري تشغيل عيون الـ OCR الذكية...")
-reader = easyocr.Reader(['en'])
-
-# تهيئة المحرك المحلي مالتنا بالإعدادات الإنتاجية القصوى
-inpainter = PatchMatchInpainter(
-    patch_size=7,
-    pyramid_levels=5,
-    iterations=6,
-    knn=3,
-    use_rotation=True,   # تفعيل دوران الأنسجة
-    use_scale=True,      # تفعيل تحجيم الأنسجة
-    use_coherence=True,  # الحفاظ على الخطوط الهيكلية للمانجا
-    verbose=True
-)
-
-RAW_DIR = "raw_img"
-CLEAN_DIR = "clean_img"
-os.makedirs(RAW_DIR, exist_ok=True)
-os.makedirs(CLEAN_DIR, exist_ok=True)
-
-images = glob.glob(os.path.join(RAW_DIR, "*"))
-
-if not images:
-    print("❌ ماكو صور بمجلد raw_img!")
-    exit()
-
-print(f"🚀 المحرك المحلي الخارق جاهز! جاري تطهير {len(images)} صور بواسطة MangaScourX...")
-
-for img_path in images:
-    img_name = os.path.basename(img_path)
-    print(f"\n✨ جاري المعالجة الرياضية لـ: {img_name}...")
+def main():
+    # 1. تحديد مجلدات المدخلات والمخرجات حسب طلبك
+    input_dir = "raw_img"
+    output_dir = "clean_img"
     
-    img = cv2.imread(img_path)
-    if img is None: continue
-        
-    # 1. صناعة قناع الحظر والعزل
-    mask = np.zeros(img.shape[:2], dtype="uint8")
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # التأكد من إنشاء مجلد الحفظ إذا لم يكن موجوداً لمنع الكراش
+    os.makedirs(output_dir, exist_ok=True)
     
-    res_norm = reader.readtext(img)
-    res_inv = reader.readtext(cv2.bitwise_not(gray))
+    print("🚀 جاري تشغيل وحش التبييض والتحرير التلقائي MangaScourX...")
     
-    for (bbox, text, prob) in (res_norm + res_inv):
-        # تمديد ذكي بـ 5 بكسل لضمان عزل تام وتغطية حواف النص
-        p1 = (max(0, int(bbox[0][0]) - 5), max(0, int(bbox[0][1]) - 5))
-        p2 = (min(img.shape[1], int(bbox[2][0]) + 5), min(img.shape[0], int(bbox[2][1]) + 5))
-        cv2.rectangle(mask, p1, p2, 255, -1)
+    # 2. تهيئة محرك التنظيف الشامل بكامل الأسلحة والترسانة الرياضية
+    pipeline = msx.MangaCleanPipeline(
+        inpainting_method="patchmatch",  # تشغيل الخوارزمية خماسية الأبعاد الأسطورية
+        patch_size=7,                    # الحجم المتوازن والمثالي للبكسلات
+        denoise_level=5,                 # تنظيف وتنعيم النويز (التحبب)
+        whiten_background=True           # تبييض خلفيات الصفحات تلقائياً
+    )
+    
+    # 3. جلب جميع الصور من مجلد raw_img
+    if not os.path.exists(input_dir):
+        print(f"⚠️ المجلد '{input_dir}' غير موجود! تأكد من إضافة الصور بداخله.")
+        return
+
+    files = [f for f in os.listdir(input_dir) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))]
+    
+    if not files:
+        print("📥 لا توجد صور جديدة داخل مجلد raw_img للتنظيف.")
+        return
         
-    try:
-        print("🎯 جاري استدعاء الـ 5D PatchMatch Engine لإعادة بناء النسيج...")
+    print(f"📸 تم العثور على {len(files)} صورة، جاري الطحن والتنظيف بالـ 5D...")
+
+    # 4. الدوران على الصور ومعالجتها واحدة تلو الأخرى
+    for file_name in files:
+        input_path = os.path.join(input_dir, file_name)
+        output_path = os.path.join(output_dir, file_name)
         
-        # تشغيل التبييض والتنظيف الخارق المبني على الخوارزميات الرياضية الذكية
+        print(f"🧼 جاري تبييض وتنظيف: {file_name} ...")
+        
+        try:
+            # قراءة الصورة بصيغة BGR الافتراضية
+            image = cv2.imread(input_path)
+            if image is None:
+                print(f"❌ فشل في قراءة الصورة: {file_name}")
+                continue
+                
+            # تشغيل معجزة التبييض والـ OCR وسحب المصفوفات الهرمية
+            result = pipeline.run(image)
+            
+            # استخراج الصفحة النهائية النظيفة من القاموس المسترجع
+            cleaned_page = result["final_page"]
+            
+            # حفظ الصورة النظيفة داخل مجلد clean_img عشان الـ Actions يسحبها
+            cv2.imwrite(output_path, cleaned_page)
+            print(f"✅ تم الحفظ بنجاح في: {output_path}")
+            
+        except Exception as e:
+            print(f"💥 حدث خطأ غير متوقع أثناء معالجة الصورة {file_name}: {str(e)}")
+
+    print("🎉 تم الانتهاء من تبييض وتنظيف جميع الصور بنجاح! السيرفر جاهز للـ Commit.")
+
+if __name__ == "__main__":
+    main()
         # المحرك يتوقع ماسك True للـ خراب (النص) و False للـ سليم
         known_mask = mask == 0
         cleaned_img = inpainter.run(img, known_mask)
