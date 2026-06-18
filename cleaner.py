@@ -10,7 +10,9 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
     
     print("🚀 وحش التبييض والتحرير الآلي (MangaScourX v1.0.4) قيد التشغيل الملوكي...")
-    
+    import inspect
+    print("🔍 الأسماء المقبولة بداخل الـ Pipeline هي:", inspect.signature(TextRemovePipeline.__init__))
+
     pipeline = TextRemovePipeline(
         inpainter_type="patchmatch",
         enable_bubbles=True,
